@@ -43,14 +43,14 @@ void Server::start() {
     while (true) {
         cout << "Waiting for client connections...." << endl;
 
-        char* massage;
+        char* message;
 
         int firstPlayerClientSocket = connectPlayer(firstPlayer);
         int secondPlayerClientSocket = connectPlayer(secondPlayer);
 
-        massage = "START";
+        message = "START";
 
-        int n = write(firstPlayerClientSocket, massage, strlen(massage) + 1);
+        int n = write(firstPlayerClientSocket, message, strlen(message) + 1);
 
         if (n == -1) {
             cout << "Error writing to socket" << endl;
@@ -117,7 +117,6 @@ int Server::connectPlayer(player player) {
     else
         massage = "Wait_for_first_move";
 
-
     //Define the client socket's structures
     struct sockaddr_in clientAddress;
     socklen_t clientAddressLen = sizeof(clientAddress);
@@ -129,7 +128,10 @@ int Server::connectPlayer(player player) {
     if (playerClientSocket == -1)
         throw "Error on accept first client";
 
-    cout << "first player connected" << endl;
+    if (player == firstPlayer)
+        cout << "first player connected" << endl;
+    else
+        cout << "second player connected" << endl;
 
     int n = write(playerClientSocket, massage, strlen(massage) + 1);
 
