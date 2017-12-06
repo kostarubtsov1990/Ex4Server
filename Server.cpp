@@ -50,6 +50,7 @@ void Server::start() {
 
         message = "START";
 
+        //send start meesage to the first player
         int n = write(firstPlayerClientSocket, message, strlen(message) + 1);
 
         if (n == -1) {
@@ -68,13 +69,15 @@ void Server::start() {
 void Server::handleGame(int firstPlayerClientSocket, int secondPlayerClientSocket) {
 
     gameStatus status;
-
+    //if status equals "finished", game is over and server keeps listening to connections from clients.
     while (status != finished) {
+        //first player sends its move, second player updates its own board with the first player's move, and moves too.
         status = handleDirection(firstPlayerClientSocket, secondPlayerClientSocket);
 
         if (status == finished)
             break;
-
+        //sec passes its choose to the first player that updates its board according to the second's move, and
+        //the first makes its own move.
         status = handleDirection(secondPlayerClientSocket, firstPlayerClientSocket);
     }
 }
@@ -82,9 +85,9 @@ void Server::handleGame(int firstPlayerClientSocket, int secondPlayerClientSocke
 gameStatus Server::handleDirection(int from, int to) {
 
     char clientQueryBuffer [BUF_SIZE];
-
+    //read (x,y) move performed by client1
     int n = read(from, clientQueryBuffer, sizeof(clientQueryBuffer));
-
+    //handle errors
     if (n == -1) {
         cout << "Error reading arg1" << endl;
         return finished;
@@ -93,9 +96,9 @@ gameStatus Server::handleDirection(int from, int to) {
         cout << "Client disconnected" << endl;
         return finished;
     }
-
+    //send (x,y) move performed by client1 to client2
     n = write(to, clientQueryBuffer, sizeof(clientQueryBuffer));
-
+    //handle errors
     if (n == -1) {
         cout << "Error reading arg1" << endl;
         return finished;
@@ -104,6 +107,7 @@ gameStatus Server::handleDirection(int from, int to) {
         cout << "Client disconnected" << endl;
         return finished;
     }
+    //game is finished
     if (strcmp(clientQueryBuffer, "END") == 0) {
         return finished;
     }
@@ -133,6 +137,7 @@ int Server::connectPlayer(player player) {
     else
         cout << "second player connected" << endl;
 
+    //send message to the relevant player
     int n = write(playerClientSocket, massage, strlen(massage) + 1);
 
     if (n == -1) {
@@ -141,7 +146,5 @@ int Server::connectPlayer(player player) {
     }
     return playerClientSocket;
 }
-
-
 
 void Server::stop() {}

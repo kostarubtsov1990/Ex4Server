@@ -4,7 +4,7 @@
 using namespace std;
 
 int main() {
-    Server server(8001);
+    Server server(8000);
     try {
         server.start();
     }
