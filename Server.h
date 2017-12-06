@@ -5,6 +5,8 @@
 #ifndef EX4SERVER_SERVER_H
 #define EX4SERVER_SERVER_H
 
+enum player {firstPlayer, secondPlayer};
+enum gameStatus {inProgress, finished};
 
 class Server {
 public:
@@ -17,7 +19,9 @@ private:
     int port;
     int serverSocket; // the socket's file descriptor
 
-    void handleOneTurn(int firstPlayerClientSocket, int secondPlayerClientSocket);
+    void handleGame(int firstPlayerClientSocket, int secondPlayerClientSocket);
+    int connectPlayer (player player);
+    gameStatus handleDirection(int from, int to);
 };
 
 
