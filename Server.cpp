@@ -8,11 +8,25 @@
 #include <unistd.h>
 #include <iostream>
 #include <string.h>
+#include <fstream>
+#include <cstdlib>
 
 
 using namespace std;
 #define MAX_CONNECTED_CLIENTS 10
 #define BUF_SIZE 1024
+
+Server::Server() {
+    //Read the settings from file.
+    const char* fileName = "settings.txt";
+    string ip;
+    string portString;
+    ifstream myfile(fileName);
+    getline(myfile, ip);
+    getline(myfile, portString);
+
+    port = atoi(portString.c_str());
+}
 
 Server::Server(int port): port(port), serverSocket(0) {
     cout << "Server" << endl;

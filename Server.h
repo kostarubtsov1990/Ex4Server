@@ -11,6 +11,7 @@ enum gameStatus {inProgress, finished};
 class Server {
 public:
 
+    Server();
     Server(int port);
     void start();
     void stop();
