@@ -57,7 +57,7 @@ void Server::start() {
     while (true) {
         cout << "Waiting for client connections...." << endl;
 
-        char* message;
+        string message;
 
         int firstPlayerClientSocket = connectPlayer(firstPlayer);
         int secondPlayerClientSocket = connectPlayer(secondPlayer);
@@ -65,7 +65,7 @@ void Server::start() {
         message = "START";
 
         //send start meesage to the first player
-        int n = write(firstPlayerClientSocket, message, strlen(message) + 1);
+        int n = write(firstPlayerClientSocket, message.c_str(), strlen(message.c_str()) + 1);
 
         if (n == -1) {
             cout << "Error writing to socket" << endl;
@@ -128,7 +128,7 @@ gameStatus Server::handleDirection(int from, int to) {
 }
 
 int Server::connectPlayer(player player) {
-    char* massage;
+    string massage;
 
     if (player == firstPlayer)
         massage = "wait_for_opponent";
@@ -152,7 +152,7 @@ int Server::connectPlayer(player player) {
         cout << "second player connected" << endl;
 
     //send message to the relevant player
-    int n = write(playerClientSocket, massage, strlen(massage) + 1);
+    int n = write(playerClientSocket, massage.c_str(), strlen(massage.c_str()) + 1);
 
     if (n == -1) {
         cout << "Error writing to socket" << endl;
